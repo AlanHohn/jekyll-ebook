@@ -53,7 +53,10 @@ class Article
       out.push "<p class='#{f}'>" + self.metadata[f] + "</p>\n\n" unless self.metadata[f].nil?
     end
 
-    out.push self.content
+    # Hack text highlights to HTML
+    map = {'{% highlight text %}' => '<code><pre>', '{% endhighlight %}' => '</pre></code>'}
+    re = Regexp.union(map.keys)
+    out.push self.content.gsub(re, map)
 
     # Return the contents of the array
     return out.join("\n")
